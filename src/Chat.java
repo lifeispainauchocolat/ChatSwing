@@ -97,10 +97,10 @@ class Aktualisieren implements Runnable{
 
             try{
 
-                while(!(temp1 = client.readLine()).contains("exit")){
-                    String tttemp = chat.getChatWindow().getText()+"\n"+temp1;
-                    System.out.println(tttemp);
-                    chat.getChatWindow().setText(tttemp);
+                while(!(temp1 = client.readLine()).equals(null)){
+                    //String tttemp = chat.getChatWindow().getText()+"\n"+temp1;
+                    //System.out.println(tttemp);
+                    chat.getChatWindow().setText(chat.getChatWindow().getText()+"\n"+temp1);
                 }
             }catch (Exception e){
                 System.out.println(e.getMessage());

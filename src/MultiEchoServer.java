@@ -76,8 +76,8 @@ class Kommunikation implements Runnable{
 
     public void kommunizieren()throws Exception{
         String temp;
-        while(!(temp = client.readLine()).contains("exit")){
-            System.out.println(temp);
+        while(!(temp = client.readLine()).equals(null)){
+            //System.out.println(temp);
             for (Socket tempClient:clientList) {
                 tempClient.write("user "+clientNR+": "+temp+"\n");
             }
