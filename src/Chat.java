@@ -37,6 +37,8 @@ public class Chat {
         Chat tempChat = this;
         startButton.addActionListener(new ActionListener() {
             @Override
+
+
             public void actionPerformed(ActionEvent e) {
                 ipAddress=inputIP.getText();
                 String[] tempAr = ipAddress.split(":");
