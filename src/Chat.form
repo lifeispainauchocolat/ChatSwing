@@ -33,7 +33,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="localhost:1234"/>
+          <text value="localhost:5414"/>
         </properties>
       </component>
       <component id="97465" class="javax.swing.JButton" binding="startButton" default-binding="true">
