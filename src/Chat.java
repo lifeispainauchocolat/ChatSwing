@@ -98,11 +98,9 @@ class Aktualisieren implements Runnable{
             try{
 
                 while(!(temp1 = client.readLine()).contains("exit")){
-                    JTextPane tempPane = new JTextPane();
-                    tempPane.setText(chat.getChatWindow().getText()+temp1);
-                    chat.setChatWindow(tempPane);
-                    //Chat.chatWindow.setText(Chat.chatWindow.getText()+temp1);
-                    //chatWindow.updateUI();
+                    String tttemp = chat.getChatWindow().getText()+temp1;
+                    System.out.println(tttemp);
+                    chat.getChatWindow().setText(tttemp);
                 }
             }catch (Exception e){}
 
