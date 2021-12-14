@@ -26,6 +26,9 @@ public class Chat {
     }
 
     public Chat() {
+
+
+
         //thread = new Thread(new Aktualisieren(this,client));
         //thread.start();
         //if (thread.isAlive()){

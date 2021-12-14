@@ -24,7 +24,7 @@ public class MultiEchoServer{
            myThreads.add(t);
            t.start();
            System.out.println("Thread "+myThreads.size()+" started!");
-
+           System.out.println();
        }
 
        /*System.out.println("waiting for client...");
