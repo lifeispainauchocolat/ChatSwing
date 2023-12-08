@@ -1,5 +1,7 @@
-import socketio.ServerSocket;
-import socketio.Socket;
+//import socketio.ServerSocket;
+//import socketio.Socket;
+import java.io.*;
+import java.net.*;
 
 import java.util.ArrayList;
 
@@ -74,14 +76,15 @@ class Kommunikation implements Runnable{
         try{kommunizieren();}catch(Exception e){}
     }
 
-    public void kommunizieren()throws Exception{
+    public void kommunizieren() throws Exception {
+        BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+        PrintWriter out = null;
         String temp;
-        while(!(temp = client.readLine()).equals(null)){
-            //System.out.println(temp);
-            for (Socket tempClient:clientList) {
-                tempClient.write("user "+clientNR+": "+temp+"\n");
+        while ((temp = in.readLine()) != null) {
+            for (Socket tempClient : clientList) {
+                out = new PrintWriter(tempClient.getOutputStream(), true);
+                out.println("user " + clientNR + ": " + temp);
             }
-
         }
         System.out.println("closing connection...");
         beenden();

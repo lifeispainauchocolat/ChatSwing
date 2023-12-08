@@ -1,9 +1,9 @@
-import socketio.Socket;
+import java.io.*;
+import java.net.*;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 public class Chat {
     private JPanel panel1;
@@ -17,6 +17,7 @@ public class Chat {
 
     private Socket client;
     private Thread thread;
+
     public JTextPane getChatWindow() {
         return chatWindow;
     }
@@ -26,85 +27,69 @@ public class Chat {
     }
 
     public Chat() {
-
-
-
-        //thread = new Thread(new Aktualisieren(this,client));
-        //thread.start();
-        //if (thread.isAlive()){
-        //   System.out.println("Thread started!");
-        //}
         Chat tempChat = this;
         startButton.addActionListener(new ActionListener() {
             @Override
-
-
             public void actionPerformed(ActionEvent e) {
-                ipAddress=inputIP.getText();
+                ipAddress = inputIP.getText();
                 String[] tempAr = ipAddress.split(":");
                 inputIP.setVisible(false);
                 startButton.setVisible(false);
-                try {client = new Socket(tempAr[0], Integer.parseInt(tempAr[1]) );} catch (IOException ex) {}
-                if(client.connect()){
-                    chatWindow.setText("connceted to "+ipAddress);
+                try {
+                    client = new Socket(tempAr[0], Integer.parseInt(tempAr[1]));
+                    chatWindow.setText("connected to " + ipAddress);
+                    thread = new Thread(new Aktualisieren(client, tempChat));
+                    thread.start();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
                 }
-                thread = new Thread(new Aktualisieren(client,tempChat));
-                thread.start();
-
             }
         });
         sendButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            String temp = chatInput.getText();
-            chatInput.setText("");
-                //System.out.println(temp);
-            try {
-                client.write(temp+"\n");
-            }catch (Exception e1){}
+                String temp = chatInput.getText();
+                chatInput.setText("");
+                try {
+                    PrintWriter out = new PrintWriter(client.getOutputStream(), true);
+                    out.println(temp);
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
             }
         });
-
     }
 
-
-    public static void main(String[] args){
+    public static void main(String[] args) {
         JFrame frame = new JFrame("Chat");
         Chat chat = new Chat();
         frame.setContentPane(chat.panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        frame.setSize(400,400);
-
+        frame.setSize(400, 400);
     }
 }
 
-class Aktualisieren implements Runnable{
-
+class Aktualisieren implements Runnable {
     private Socket client;
     private String temp1;
     private Chat chat;
-    //private JTextPane chatWindow;
-    public Aktualisieren(Socket client, Chat chat){
-        this.client=client;
-        //this.chatWindow = jTextPane;
-        //this.chatWindow=chatWindow;
-        this.chat=chat;
+
+    public Aktualisieren(Socket client, Chat chat) {
+        this.client = client;
+        this.chat = chat;
     }
+
     @Override
     public void run() {
-
-            try{
-
-                while(!(temp1 = client.readLine()).equals(null)){
-                    //String tttemp = chat.getChatWindow().getText()+"\n"+temp1;
-                    //System.out.println(tttemp);
-                    chat.getChatWindow().setText(chat.getChatWindow().getText()+"\n"+temp1);
-                }
-            }catch (Exception e){
-                System.out.println(e.getMessage());
+        try {
+            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+            while ((temp1 = in.readLine()) != null) {
+                chat.getChatWindow().setText(chat.getChatWindow().getText() + "\n" + temp1);
             }
-
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
